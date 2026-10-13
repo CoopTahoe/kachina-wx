@@ -4,7 +4,7 @@ name: kachina-wx
 
 on:
   schedule:
-    - cron: "50 4,5,10,11,16,17,22,23 * * *"   # UTC; the gate below keeps only the Pacific hours we want
+    - cron: "20,50 4,5,10,11,16,17,22,23 * * *"   # UTC; the gate below keeps only the Pacific hours we want
   workflow_dispatch: {}                          # "Run workflow" button for a manual run
 
 permissions:
