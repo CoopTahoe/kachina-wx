@@ -1,1 +1,1 @@
-{"started":"2026-10-12T17:42:44-07:00","ok":["kirkwood_stations","open_meteo_kirkwood","open_meteo_nearby","nws_alerts","nws_afd","snow_lab","cpc_weekly"],"failed":{},"notes":[],"finished":"2026-10-12T17:42:54-07:00"}
+{"started":"2026-10-13T04:14:35-07:00","ok":["kirkwood_stations","open_meteo_kirkwood","nws_alerts","nws_afd","snow_lab","cpc_weekly"],"failed":{"open_meteo_nearby":"URLError: <urlopen error _ssl.c:993: The handshake operation timed out>"},"notes":[],"finished":"2026-10-13T04:15:12-07:00"}
