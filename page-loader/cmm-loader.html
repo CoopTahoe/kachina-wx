@@ -1,0 +1,41 @@
+<script>
+/* Kachina live loader v1 (19 Oct 2026). Reads the shared Winter Desk snapshot from GitHub Pages.
+   Paste right after the JSON snapshot tag, just before the page's main script. The embedded
+   snapshot stays as the fallback. Never edits the guard (OWG) or the main script; it holds the main
+   script for up to 2.5 s, swaps in the newer snapshot, then runs the main script once. */
+(function(){
+  var SNAP_ID='cmmw-snap', ROOT_ID='cmm-wx';
+  var SRC='https://cooptahoe.github.io/kachina-wx/snapshot.json';
+  var me=document.currentScript, tag=document.getElementById(SNAP_ID), root=document.getElementById(ROOT_ID);
+  if(!me||!tag||!root||root.__init||root.__kl)return; /* main script already ran, or layout changed: do nothing */
+  root.__kl=1; root.__init=1; /* the main script sees this and waits */
+  function mainScript(){ /* the page's main script is parsed after this one, so look it up at run time */
+    var n=me.nextElementSibling;
+    if(n&&n.tagName==='SCRIPT'&&n.textContent.indexOf("'"+SNAP_ID+"'")>-1)return n;
+    var all=document.getElementsByTagName('script');
+    for(var i=0;i<all.length;i++){var x=all[i];if(x!==me&&x.textContent.indexOf("getElementById('"+ROOT_ID+"')")>-1&&x.textContent.indexOf("'"+SNAP_ID+"'")>-1)return x}
+    return null;
+  }
+  var emb=0; try{emb=Date.parse(JSON.parse(tag.textContent).updated)||0}catch(e){}
+  var done=0;
+  function go(txt,src){
+    if(done)return; done=1;
+    if(txt)tag.textContent=txt;
+    root.__init=0; root.setAttribute('data-snap-src',src);
+    var main=mainScript(); if(!main){root.setAttribute('data-snap-src','loader-lost-main');return}
+    var s=document.createElement('script'); s.textContent=main.textContent;
+    main.parentNode.insertBefore(s,main.nextSibling);
+  }
+  var t=setTimeout(function(){go(null,'embedded-timeout')},2500);
+  try{
+    fetch(SRC+'?t='+Math.floor(Date.now()/3e5),{cache:'no-store',credentials:'omit'})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.text()})
+    .then(function(txt){
+      var j=JSON.parse(txt), u=Date.parse(j&&j.updated)||0;
+      var ok=j&&j.wb&&j.wb.nam&&j.wb.aifs&&j.wb.goesW&&j.kirkwood&&j.cssl&&j.enso&&u>emb;
+      clearTimeout(t); go(ok?txt:null, ok?'live':'embedded-newer');
+    })
+    .catch(function(){clearTimeout(t);go(null,'embedded-fallback')});
+  }catch(e){clearTimeout(t);go(null,'embedded-fallback')}
+})();
+</script>
